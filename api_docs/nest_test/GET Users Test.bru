@@ -1,0 +1,23 @@
+meta {
+  name: GET Users Test
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{host}}/api/employees?role=aa
+  body: json
+  auth: none
+}
+
+params:query {
+  role: aa
+}
+
+body:json {
+  {
+    "name": "Smith",
+    "email": "9889@mail.com",
+    "role":"INTERN"
+  }
+}

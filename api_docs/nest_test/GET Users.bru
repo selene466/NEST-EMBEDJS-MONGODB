@@ -1,0 +1,22 @@
+meta {
+  name: GET Users
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{host}}/users?role=ADMIN
+  body: json
+  auth: none
+}
+
+params:query {
+  role: ADMIN
+}
+
+body:json {
+  {
+    "name": "",
+    "role":"alkfw"
+  }
+}
