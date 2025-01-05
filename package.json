@@ -24,6 +24,7 @@
   "dependencies": {
     "@llm-tools/embedjs": "^0.1.28",
     "@llm-tools/embedjs-hnswlib": "^0.1.28",
+    "@llm-tools/embedjs-interfaces": "^0.1.28",
     "@llm-tools/embedjs-libsql": "^0.1.28",
     "@llm-tools/embedjs-loader-msoffice": "^0.1.28",
     "@llm-tools/embedjs-mongodb": "^0.1.28",

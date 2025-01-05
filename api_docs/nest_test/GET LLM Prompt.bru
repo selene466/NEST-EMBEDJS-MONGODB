@@ -1,13 +1,17 @@
 meta {
-  name: POST LLM Upload
+  name: GET LLM Prompt
   type: http
-  seq: 4
+  seq: 5
 }
 
-post {
-  url: {{host}}/api/llm/upload
+get {
+  url: {{host}}/api/llm/prompt?prompt=apa tugas supervisor?
   body: multipartForm
   auth: none
+}
+
+params:query {
+  prompt: apa tugas supervisor?
 }
 
 body:json {

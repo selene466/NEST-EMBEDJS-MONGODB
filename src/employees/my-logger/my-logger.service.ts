@@ -1,7 +1,10 @@
 import { Injectable, ConsoleLogger } from '@nestjs/common';
 import * as fs from 'fs';
 import { promises as fsPromises } from 'fs';
+import { fileURLToPath } from 'url';
 import * as path from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 @Injectable()
 export class MyLoggerService extends ConsoleLogger {
