@@ -5,7 +5,7 @@ import * as path from 'path';
 
 @Injectable()
 export class MyLoggerService extends ConsoleLogger {
-  async logToFile(entry) {
+  async logToFile(entry: any) {
     const formattedEntry = `${Intl.DateTimeFormat('en-US', {
       dateStyle: 'short',
       timeStyle: 'short',

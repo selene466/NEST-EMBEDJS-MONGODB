@@ -9,10 +9,10 @@ import {
   Query,
   Ip,
 } from '@nestjs/common';
-import { EmployeesService } from './employees.service';
+import { EmployeesService } from './employees.service.js';
 import { Prisma } from '@prisma/client';
 import { Throttle, SkipThrottle } from '@nestjs/throttler';
-import { MyLoggerService } from './my-logger/my-logger.service';
+import { MyLoggerService } from './my-logger/my-logger.service.js';
 
 @Controller('employees')
 export class EmployeesController {

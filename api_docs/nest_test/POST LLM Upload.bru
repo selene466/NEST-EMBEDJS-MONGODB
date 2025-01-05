@@ -1,0 +1,28 @@
+meta {
+  name: POST LLM Upload
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{host}}/api/llm/upload
+  body: multipartForm
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Smith",
+    "email": "9889@mail.com",
+    "role":"INTERN"
+  }
+}
+
+body:form-urlencoded {
+  @: @
+}
+
+body:multipart-form {
+  : 
+  file: @file(/home/selene/Downloads/12. PROSEDURE IJIN PADA JAM KERJA.docx)
+}
