@@ -70,7 +70,7 @@ export class LlmService implements OnModuleInit {
     prompt: string;
   }): Promise<QueryResponse> {
     return this.ragApplication.query(
-      `system: "jawab langsung tanpa basa basi"\session: ${promptAI.context}\nprompt:${promptAI.prompt}`,
+      `system: ${process.env.SYSTEM_PROMPT}\session: ${promptAI.context}\nprompt:${promptAI.prompt}`,
     );
   }
 
