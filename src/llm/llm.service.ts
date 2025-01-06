@@ -5,6 +5,7 @@ import { QueryResponse } from '@llm-tools/embedjs-interfaces';
 // import { HNSWDb } from '@llm-tools/embedjs-hnswlib';
 // import { MongoDb } from '@llm-tools/embedjs-mongodb';
 import { LibSqlDb } from '@llm-tools/embedjs-libsql';
+// import { ImageLoader } from '@llm-tools/embedjs-loader-image';
 import {
   DocxLoader,
   ExcelLoader,
@@ -42,8 +43,8 @@ export class LlmService implements OnModuleInit {
 
       .setEmbeddingModel(
         new OllamaEmbeddings({
-          model: 'nomic-embed-text:latest',
-          baseUrl: 'http://localhost:11434',
+          model: process.env.OLLAMA_EMBEDDING_MODEL,
+          baseUrl: process.env.OLLAMA_BASE_URL,
         }),
       )
       .setTemperature(0.008)
@@ -83,6 +84,19 @@ export class LlmService implements OnModuleInit {
   }
 
   async addFileLoader(filePath: string) {
+    // if (
+    //   filePath.endsWith('.jpg') ||
+    //   filePath.endsWith('.jpeg') ||
+    //   filePath.endsWith('.png') ||
+    //   filePath.endsWith('.gif') ||
+    //   filePath.endsWith('.webp')
+    // ) {
+    //   console.log('ADDED TO IMAGE:', filePath);
+    //   await this.ragApplication.addLoader(
+    //     new ImageLoader({ filePathOrUrl: filePath }),
+    //   );
+    // }
+
     if (filePath.endsWith('.docx') || filePath.endsWith('.doc')) {
       console.log('ADDED TO DOCX:', filePath);
       await this.ragApplication.addLoader(
@@ -148,9 +162,12 @@ export class LlmService implements OnModuleInit {
       });
 
       if (existingFileName) {
-        const fileName = file.originalname.split('.')[0] + `_${Date.now()}`;
-        const fileFormat = file.originalname.split('.')[1];
-        file.originalname = fileName + '.' + fileFormat;
+        const fileFormat = file.originalname.split('.').pop();
+        const fileName = file.originalname.endsWith(fileFormat)
+          ? file.originalname.slice(0, -file.originalname.length) +
+            `_${Date.now()}`
+          : file.originalname;
+        file.originalname = fileName.replace('.', '') + '.' + fileFormat;
       }
 
       // Save file locally

@@ -20,6 +20,9 @@ importers:
       '@llm-tools/embedjs-libsql':
         specifier: ^0.1.28
         version: 0.1.28(openai@4.77.3(zod@3.24.1))
+      '@llm-tools/embedjs-loader-image':
+        specifier: ^0.1.28
+        version: 0.1.28(openai@4.77.3(zod@3.24.1))
       '@llm-tools/embedjs-loader-msoffice':
         specifier: ^0.1.28
         version: 0.1.28(@langchain/core@0.3.27(openai@4.77.3(zod@3.24.1)))(openai@4.77.3(zod@3.24.1))
@@ -553,6 +556,9 @@ packages:
 
   '@llm-tools/embedjs-libsql@0.1.28':
     resolution: {integrity: sha512-Cn65OJo/DDovHYEwPpS1m9mhbp3aT1HUw/tu5GeTH22Fmt7ET3VECKJuIxv9rFtlimu29dgRuVmmp4ju8prEvA==}
+
+  '@llm-tools/embedjs-loader-image@0.1.28':
+    resolution: {integrity: sha512-7JyQMlKkVyBv2A9m/vH1ux/gsP2nQ+Yqr8MvvM/7udiZBD9uQEuqvNthW0T/v3ak6uGu4ijACXElpUVOkZ73Uw==}
 
   '@llm-tools/embedjs-loader-msoffice@0.1.28':
     resolution: {integrity: sha512-DM+OuG02uqsZP06EsrcVVDgS5Rpybv8YtidPEZbqnAwr1Iycu0IvvKcsO7gojjZiDRAVphsoA7tcPE0UWHAbwg==}
@@ -1655,6 +1661,9 @@ packages:
   execa@5.1.1:
     resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
     engines: {node: '>=10'}
+
+  exifremove@1.0.1:
+    resolution: {integrity: sha512-a4VrNsSgpKBo9dHFsRi098XYm/X8dHP2NPA4N/3WAIxInQ8VHOfic/F8uAMIlWk4QRurTFwClFUb0QkMj4nqHg==}
 
   exit@0.1.2:
     resolution: {integrity: sha512-Zk/eNKV2zbjpKzrsQ+n1G6poVbErQxJ0LBOJXaKZ1EViLzH+hrLu9cdXI4zw9dBQJslwBEpbQ2P1oS7nDxs6jQ==}
@@ -4117,6 +4126,20 @@ snapshots:
       - supports-color
       - utf-8-validate
 
+  '@llm-tools/embedjs-loader-image@0.1.28(openai@4.77.3(zod@3.24.1))':
+    dependencies:
+      '@langchain/core': 0.3.27(openai@4.77.3(zod@3.24.1))
+      '@llm-tools/embedjs-interfaces': 0.1.28(openai@4.77.3(zod@3.24.1))
+      '@llm-tools/embedjs-utils': 0.1.28(openai@4.77.3(zod@3.24.1))
+      debug: 4.4.0
+      exifremove: 1.0.1
+      md5: 2.3.0
+      mime: 4.0.6
+      stream-mime-type: 2.0.0
+    transitivePeerDependencies:
+      - openai
+      - supports-color
+
   '@llm-tools/embedjs-loader-msoffice@0.1.28(@langchain/core@0.3.27(openai@4.77.3(zod@3.24.1)))(openai@4.77.3(zod@3.24.1))':
     dependencies:
       '@langchain/textsplitters': 0.1.0(@langchain/core@0.3.27(openai@4.77.3(zod@3.24.1)))
@@ -5375,6 +5398,8 @@ snapshots:
       onetime: 5.1.2
       signal-exit: 3.0.7
       strip-final-newline: 2.0.0
+
+  exifremove@1.0.1: {}
 
   exit@0.1.2: {}
 
