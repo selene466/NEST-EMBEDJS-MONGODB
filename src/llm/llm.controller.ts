@@ -2,12 +2,16 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
   Body,
+  Param,
   UseInterceptors,
   UploadedFile,
+  Delete,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { LlmService } from './llm.service.js';
+import { Prisma } from '@prisma/client';
 
 @Controller('llm')
 export class LlmController {
@@ -17,6 +21,14 @@ export class LlmController {
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     return this.llmService.fileUpload(file);
+  }
+
+  @Patch('file/:id')
+  updateFile(
+    @Param('id') id: string,
+    @Body() updateFileInp: Prisma.FileUploadUpdateInput,
+  ) {
+    return this.llmService.updateFile(id, updateFileInp);
   }
 
   @Post('prompt/')
@@ -42,5 +54,28 @@ export class LlmController {
   @Post('add-file-loader/')
   addFileLoader(@Body() fileLoader: { path: string }) {
     return this.llmService.addFileLoader(fileLoader.path);
+  }
+
+  @Get('list-group/')
+  listGroup() {
+    return this.llmService.listGroup();
+  }
+
+  @Post('create-group/')
+  createGroup(@Body() createGroupInp: Prisma.FileGroupCreateInput) {
+    return this.llmService.createGroup(createGroupInp);
+  }
+
+  @Patch('update-group/:id')
+  updateGroup(
+    @Param('id') id: string,
+    @Body() updateGroupInp: Prisma.FileGroupUpdateInput,
+  ) {
+    return this.llmService.updateGroup(id, updateGroupInp);
+  }
+
+  @Delete('delete-group/:id')
+  deleteGroup(@Param('id') id: string) {
+    return this.llmService.deleteGroup(id);
   }
 }

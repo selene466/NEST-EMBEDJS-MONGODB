@@ -1,0 +1,21 @@
+meta {
+  name: POST LLM Create Group
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{host}}/api/llm/create-group
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Group 1"
+  }
+}
+
+body:form-urlencoded {
+  @: @
+}

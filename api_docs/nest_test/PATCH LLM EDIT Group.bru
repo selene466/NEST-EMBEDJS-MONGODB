@@ -1,0 +1,21 @@
+meta {
+  name: PATCH LLM EDIT Group
+  type: http
+  seq: 11
+}
+
+patch {
+  url: {{host}}/api/llm/update-group/fbbe0b7b-9641-4d94-90f4-ac0639fe9799
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Group X"
+  }
+}
+
+body:form-urlencoded {
+  @: @
+}

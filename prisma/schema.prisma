@@ -29,10 +29,20 @@ model Employee {
 }
 
 model FileUpload {
-  id       String  @id @default(uuid()) @map("_id")
-  name     String?
-  checksum String?
-  mime     String?
-  size     Int
-  path     String  @unique
+  id          String     @id @default(uuid()) @map("_id")
+  name        String?
+  checksum    String?
+  mime        String?
+  size        Int
+  path        String     @unique
+  FileGroup   FileGroup? @relation(fields: [fileGroupId], references: [id])
+  fileGroupId String?
+}
+
+model FileGroup {
+  id        String       @id @default(uuid()) @map("_id")
+  name      String       @unique
+  files     FileUpload[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 }

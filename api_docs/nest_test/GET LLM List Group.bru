@@ -1,0 +1,27 @@
+meta {
+  name: GET LLM List Group
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{host}}/api/llm/list-file
+  body: multipartForm
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Smith",
+    "email": "9889@mail.com",
+    "role":"INTERN"
+  }
+}
+
+body:form-urlencoded {
+  @: @
+}
+
+body:multipart-form {
+  file: @file(/home/selene/Downloads/12. PROSEDURE IJIN PADA JAM KERJA.docx)
+}

@@ -17,6 +17,7 @@ import { promises as fsPromises } from 'fs';
 import { fileURLToPath } from 'url';
 import * as path from 'path';
 import checksum from 'checksum';
+import { Prisma } from '@prisma/client';
 // import { PrismaClient } from '@prisma/client';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,8 +35,8 @@ export class LlmService implements OnModuleInit {
     this.ragApplication = await new RAGApplicationBuilder()
       .setModel(
         new Ollama({
-          modelName: 'llama3.2-vision:11b-instruct-q4_K_M',
-          baseUrl: 'http://localhost:11434',
+          modelName: process.env.OLLAMA_MODEL,
+          baseUrl: process.env.OLLAMA_BASE_URL,
         }),
       )
 
@@ -113,7 +114,6 @@ export class LlmService implements OnModuleInit {
   }
 
   async fileUpload(file: Express.Multer.File) {
-    console.log(file);
     try {
       if (!fs.existsSync(path.join(__dirname, '..', 'uploads'))) {
         await fsPromises.mkdir(path.join(__dirname, '..', 'uploads'));
@@ -176,6 +176,13 @@ export class LlmService implements OnModuleInit {
     }
   }
 
+  async updateFile(id: string, updateFileInp: Prisma.FileUploadUpdateInput) {
+    return this.databaseService.fileUpload.update({
+      where: { id: id.toString() },
+      data: updateFileInp,
+    });
+  }
+
   async listFiles() {
     try {
       return this.databaseService.fileUpload.findMany();
@@ -183,5 +190,53 @@ export class LlmService implements OnModuleInit {
       console.error(error);
       throw error;
     }
+  }
+
+  async listGroup() {
+    try {
+      return this.databaseService.fileGroup.findMany({
+        include: {
+          files: true,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  async createGroup(createGroupInp: Prisma.FileGroupCreateInput) {
+    return this.databaseService.fileGroup.create({
+      data: createGroupInp,
+    });
+  }
+
+  async updateGroup(id: string, updateGroupInp: Prisma.FileGroupUpdateInput) {
+    return this.databaseService.fileGroup.update({
+      where: { id: id.toString() },
+      data: updateGroupInp,
+    });
+  }
+
+  async deleteGroup(id: string) {
+    const group = await this.databaseService.fileGroup.findUnique({
+      where: { id: id.toString() },
+      include: {
+        files: true,
+      },
+    });
+
+    if (group && group.files.length > 0) {
+      for (const file of group.files) {
+        await this.databaseService.fileUpload.update({
+          where: { id: file.id },
+          data: { fileGroupId: null },
+        });
+      }
+    }
+
+    return this.databaseService.fileGroup.delete({
+      where: { id: id.toString() },
+    });
   }
 }

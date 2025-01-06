@@ -11,7 +11,11 @@ async function bootstrap() {
   app.getHttpServer().setTimeout(3600000);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
   app.useLogger(app.get(MyLoggerService));
-  app.enableCors();
+  app.enableCors({
+    allowedHeaders: ['content-type'],
+    origin: ['http://localhost:3000', 'http://192.168.1.10:3000'],
+    credentials: true,
+  });
   app.setGlobalPrefix('api');
   await app.listen(process.env.PORT ?? 6460);
 }
