@@ -2,7 +2,7 @@ import {
   Controller,
   Get,
   Post,
-  Query,
+  Body,
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
@@ -19,8 +19,28 @@ export class LlmController {
     return this.llmService.fileUpload(file);
   }
 
-  @Get('prompt/')
-  promptQuery(@Query('prompt') prompt: string) {
-    return this.llmService.query(prompt);
+  @Post('prompt/')
+  promptAI(@Body() promptAI: { context: string; prompt: string }) {
+    return this.llmService.prompt(promptAI);
+  }
+
+  @Get('delete-conversation/')
+  deleteConversation() {
+    return this.llmService.deleteConversation();
+  }
+
+  @Get('list-file/')
+  listFile() {
+    return this.llmService.listFiles();
+  }
+
+  @Post('remove-file-loader/')
+  removeFileLoader() {
+    return this.llmService.removeFileLoader();
+  }
+
+  @Post('add-file-loader/')
+  addFileLoader(@Body() fileLoader: { path: string }) {
+    return this.llmService.addFileLoader(fileLoader.path);
   }
 }

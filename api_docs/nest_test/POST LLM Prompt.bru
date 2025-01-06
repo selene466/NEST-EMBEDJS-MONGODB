@@ -1,0 +1,26 @@
+meta {
+  name: POST LLM Prompt
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{host}}/api/llm/prompt
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "context": "soekarno",
+    "prompt":"kapan soekarno meninggal?"
+  }
+}
+
+body:form-urlencoded {
+  @: @
+}
+
+body:multipart-form {
+  file: @file(/home/selene/Downloads/12. PROSEDURE IJIN PADA JAM KERJA.docx)
+}

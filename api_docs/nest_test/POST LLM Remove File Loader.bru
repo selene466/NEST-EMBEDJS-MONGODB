@@ -1,0 +1,23 @@
+meta {
+  name: POST LLM Remove File Loader
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{host}}/api/llm/remove-file-loader
+  body: none
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Smith",
+    "email": "9889@mail.com",
+    "role":"INTERN"
+  }
+}
+
+body:form-urlencoded {
+  @: @
+}

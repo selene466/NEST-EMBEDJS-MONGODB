@@ -1,0 +1,21 @@
+meta {
+  name: POST LLM Add File Loader
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{host}}/api/llm/add-file-loader
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "path": "/home/selene/DEV/test/EMBEDJS/lesson01/dist/uploads/12. PROSEDURE IJIN PADA JAM KERJA.docx"
+  }
+}
+
+body:form-urlencoded {
+  @: @
+}

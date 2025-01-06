@@ -29,9 +29,10 @@ model Employee {
 }
 
 model FileUpload {
-  id   String  @id @default(uuid()) @map("_id")
-  name String?
-  mime String?
-  size Int
-  path String  @unique
+  id       String  @id @default(uuid()) @map("_id")
+  name     String?
+  checksum String?
+  mime     String?
+  size     Int
+  path     String  @unique
 }

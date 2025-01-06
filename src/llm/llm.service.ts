@@ -5,12 +5,18 @@ import { QueryResponse } from '@llm-tools/embedjs-interfaces';
 // import { HNSWDb } from '@llm-tools/embedjs-hnswlib';
 // import { MongoDb } from '@llm-tools/embedjs-mongodb';
 import { LibSqlDb } from '@llm-tools/embedjs-libsql';
-import { DocxLoader } from '@llm-tools/embedjs-loader-msoffice';
+import {
+  DocxLoader,
+  ExcelLoader,
+  PptLoader,
+} from '@llm-tools/embedjs-loader-msoffice';
+import { PdfLoader } from '@llm-tools/embedjs-loader-pdf';
 import { DatabaseService } from '../database/database.service.js';
 import * as fs from 'fs';
 import { promises as fsPromises } from 'fs';
 import { fileURLToPath } from 'url';
 import * as path from 'path';
+import checksum from 'checksum';
 // import { PrismaClient } from '@prisma/client';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -57,9 +63,53 @@ export class LlmService implements OnModuleInit {
     return this.ragApplication.query(query);
   }
 
-  async addDocx(filePath: string) {
-    console.log('ADDED TO DOCX:', filePath);
-    this.ragApplication.addLoader(new DocxLoader({ filePathOrUrl: filePath }));
+  async prompt(promptAI: {
+    context: string;
+    prompt: string;
+  }): Promise<QueryResponse> {
+    return this.ragApplication.query(
+      `system: "jawab langsung tanpa basa basi"\session: ${promptAI.context}\nprompt:${promptAI.prompt}`,
+    );
+  }
+
+  async deleteConversation() {
+    await this.ragApplication.deleteConversation('default');
+  }
+
+  async removeFileLoader() {
+    await this.ragApplication.deleteLoader('default');
+    return 'done';
+  }
+
+  async addFileLoader(filePath: string) {
+    if (filePath.endsWith('.docx') || filePath.endsWith('.doc')) {
+      console.log('ADDED TO DOCX:', filePath);
+      await this.ragApplication.addLoader(
+        new DocxLoader({ filePathOrUrl: filePath }),
+      );
+    }
+
+    if (filePath.endsWith('.xlsx') || filePath.endsWith('.xls')) {
+      console.log('ADDED TO XLSX:', filePath);
+      await this.ragApplication.addLoader(
+        new ExcelLoader({ filePathOrUrl: filePath }),
+      );
+    }
+
+    if (filePath.endsWith('.pptx') || filePath.endsWith('.ppt')) {
+      console.log('ADDED TO PPTX:', filePath);
+      await this.ragApplication.addLoader(
+        new PptLoader({ filePathOrUrl: filePath }),
+      );
+    }
+
+    if (filePath.endsWith('.pdf')) {
+      console.log('ADDED TO PDF:', filePath);
+      await this.ragApplication.addLoader(
+        new PdfLoader({ filePathOrUrl: filePath }),
+      );
+    }
+    return 'done';
   }
 
   async fileUpload(file: Express.Multer.File) {
@@ -76,6 +126,33 @@ export class LlmService implements OnModuleInit {
         file.originalname,
       );
 
+      // Checksum
+      const fileChecksum = checksum(uploadPath);
+
+      // Check existing file
+      const existingFile = await this.databaseService.fileUpload.findFirst({
+        where: {
+          checksum: fileChecksum,
+        },
+      });
+
+      if (existingFile) {
+        return existingFile;
+      }
+
+      // check same file name
+      const existingFileName = await this.databaseService.fileUpload.findFirst({
+        where: {
+          name: file.originalname,
+        },
+      });
+
+      if (existingFileName) {
+        const fileName = file.originalname.split('.')[0] + `_${Date.now()}`;
+        const fileFormat = file.originalname.split('.')[1];
+        file.originalname = fileName + '.' + fileFormat;
+      }
+
       // Save file locally
       const writeStream = fs.createWriteStream(uploadPath);
       writeStream.write(file.buffer);
@@ -85,17 +162,23 @@ export class LlmService implements OnModuleInit {
       const savedFile = await this.databaseService.fileUpload.create({
         data: {
           name: file.originalname,
+          checksum: fileChecksum,
           mime: file.mimetype,
           size: file.size,
           path: uploadPath,
         },
       });
 
-      if (savedFile.mime.includes('word')) {
-        this.addDocx(savedFile.path);
-      }
-
       return savedFile;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  async listFiles() {
+    try {
+      return this.databaseService.fileUpload.findMany();
     } catch (error) {
       console.error(error);
       throw error;

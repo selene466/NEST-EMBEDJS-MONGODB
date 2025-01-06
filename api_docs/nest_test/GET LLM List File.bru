@@ -1,17 +1,13 @@
 meta {
-  name: GET LLM Prompt
+  name: GET LLM List File
   type: http
-  seq: 5
+  seq: 6
 }
 
 get {
-  url: {{host}}/api/llm/prompt?prompt=apa tugas supervisor?
+  url: {{host}}/api/llm/list-file
   body: multipartForm
   auth: none
-}
-
-params:query {
-  prompt: apa tugas supervisor?
 }
 
 body:json {
